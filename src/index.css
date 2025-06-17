@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	.tabContainer {
+		@apply flex w-fit items-center justify-start mt-8 rounded-md bg-blue-200/10 border-2 border-blue-900/10 px-1.5 py-1.5 gap-3 relative text-xs sm:text-base md:text-base lg:text-base;
+	}
+
+	.tabContainer input {
+		@apply hidden;
+	}
+
+	.tabName {
+		@apply flex items-center gap-2 cursor-pointer h-[1.3rem] px-[1.2rem] py-[1.05rem] rounded-sm box-border font-semibold
+		transition-all duration-[50] ease-in-out;
+	}
+
+	.tabContent {
+		@apply flex flex-col min-w-[22.3rem] w-fit px-8 items-center justify-center absolute top-[7rem] left-0 rounded-md p-[0.7rem] opacity-0 z-0 transition-all duration-300 ease-in-out shadow-[1px_2px_15px_rgba(0,0,0,0.2)];
+	}
+
+	input:checked + label .tabContent {
+		@apply opacity-100 z-[1];
+	}
+
+	.tableRow {
+		@apply flex gap-12;
+	}
+
+	th,
+	table,
+	tr,
+	thead {
+		@apply bg-slate-100/50;
+	}
+}
+
+td,
+th {
+	border-style: solid;
+	border-color: #dddddd;
+	border-width: 0 1px 0 1px;
+
+	text-align: left;
+	padding: 2px;
+}
+
+body,
+html,
+root {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+/* For Webkit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: blue !important;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgba(23, 37, 84, 0.6); /* blue-950/60 */
+	border-radius: 4px;
+}
+
+/* Firefox */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(23, 37, 84, 0.6) transparent;
+}
