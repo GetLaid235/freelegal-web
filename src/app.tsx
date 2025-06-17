@@ -15,14 +15,14 @@ function App() {
 					id="heading"
 					className="items-center justify-center flex flex-col gap-5 mb-4"
 				>
-					<p className="text-white text-5xl font-bold">Freelegal</p>
+					<p className="text-white text-5xl font-bold">Get Legal Aid</p>
 					<p className="text-white text-2xl">Justice, Made Accessible</p>
 					<p className="text-brand-blue text-lg font-semibold bg-brand-gold p-3 rounded-3xl">
 						🚀 Launching Soon
 					</p>
 				</div>
 				<div
-					id="whatIsFreelegal"
+					id="whatIsGetLegalAid"
 					className="bg-white px-6 py-16 w-fit flex flex-col items-center justify-center text-center rounded-xl gap-4"
 				>
 					<p className="text-3xl font-bold">
@@ -30,7 +30,7 @@ function App() {
 					</p>
 					<span className="w-[85%] mb-8">
 						<p className="text-slate-500 text-wrap text-[1.2rem]">
-							Freelegal is the premier platform that seamlessly connects clients
+							Get Legal Aid is the premier platform that seamlessly connects clients
 							seeking legal representation with qualified law firms and expert
 							account managers.
 						</p>
