@@ -62,7 +62,7 @@ function App() {
 					<form className="bg-white px-6 py-8 w-fit lg:max-w-screen flex flex-col items-center justify-center text-center rounded-xl gap-6 mb-4">
 						<p className="text-2xl font-bold">Be the first to know</p>
 						<p>
-							Join our waiting list and get notified when Freelegal launches
+							Join our waiting list and get notified when Get legal Aid launches
 						</p>
 						<div className="flex gap-2">
 							<input
@@ -79,7 +79,7 @@ function App() {
 						</p>
 					</form>
 					<span className="flex flex-col my-8 items-center justify-center text-slate-300">
-						&copy; {new Date().getFullYear()} Freelegal - Justice, Made
+						&copy; {new Date().getFullYear()} Get Legal Aid - Justice, Made
 						Accessible
 					</span>
 				</div>
