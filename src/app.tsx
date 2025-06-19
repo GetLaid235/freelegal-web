@@ -4,10 +4,23 @@ import Footer from "./components/footer";
 import How from "./components/how";
 import Who from "./components/who";
 import { SlPeople } from "react-icons/sl";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
-const launchingSoon = true;
+const launchingSoon = false;
 
 function App() {
+	const location = useLocation();
+
+	useEffect(() => {
+		if (location.hash) {
+			const el = document.getElementById(location.hash.replace("#", ""));
+			if (el) {
+				el.scrollIntoView({ behavior: "smooth" });
+			}
+		}
+	}, [location]);
+
 	if (launchingSoon) {
 		return (
 			<div className="bg-brand-blue pt-24 px-6 max-w-screen flex flex-col items-center gap-10 min-h-screen">

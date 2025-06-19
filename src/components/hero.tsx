@@ -1,15 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Hero = () => {
 	const navigate = useNavigate();
 	const handleSubmitCase = () => {
-		navigate("/submit", { state: { from: "heroReqAid" } });
-	};
-	const handleLearnMore = () => {
-		const el = document.getElementById("who-we-serve");
-		if (el) {
-			el.scrollIntoView({ behavior: "smooth" });
-		}
+		navigate("/submit");
 	};
 
 	return (
@@ -40,12 +34,12 @@ const Hero = () => {
 						>
 							Submit Case
 						</button>
-						<button
-							onClick={handleLearnMore}
+						<Link
+							to="#who-we-serve"
 							className="w-fit py-2 px-5 text-blue-900 bg-white text-lg font-semibold rounded-md shadow-sm shadow-blue-950/40 hover:bg-gray-200"
 						>
 							Learn More
-						</button>
+						</Link>
 					</div>
 				</div>
 			</div>
