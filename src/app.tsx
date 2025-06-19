@@ -7,7 +7,7 @@ import { SlPeople } from "react-icons/sl";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-const launchingSoon = false;
+const launchingSoon = true;
 
 function App() {
 	const location = useLocation();
@@ -43,9 +43,9 @@ function App() {
 					</p>
 					<span className="w-[85%] mb-8">
 						<p className="text-slate-500 text-wrap text-[1.2rem]">
-							Get Legal Aid is the premier platform that seamlessly connects clients
-							seeking legal representation with qualified law firms and expert
-							account managers.
+							Get Legal Aid is the premier platform that seamlessly connects
+							clients seeking legal representation with qualified law firms and
+							expert account managers.
 						</p>
 					</span>
 					<div className="flex flex-wrap items-center justify-center gap-16 mb-8">
