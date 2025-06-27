@@ -1,43 +1,20 @@
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Register = () => {
 	const location = useLocation();
 
-	const handleVolunteerRadio = () => {
-		const volunteerForm = document.getElementById("volunteerForm");
-		const legalRepForm = document.getElementById("legalRepForm");
-		volunteerForm?.classList.remove("hidden");
-		volunteerForm?.classList.add("flex");
-		legalRepForm?.classList.remove("flex");
-		legalRepForm?.classList.add("hidden");
-	};
-	const handleLegalRepRadio = () => {
-		const volunteerForm = document.getElementById("volunteerForm");
-		const legalRepForm = document.getElementById("legalRepForm");
-		volunteerForm?.classList.remove("flex");
-		volunteerForm?.classList.add("hidden");
-		legalRepForm?.classList.remove("hidden");
-		legalRepForm?.classList.add("flex");
-	};
-
-	const handleFirm = () => {
-		const firmName = document.getElementById("firmNameDiv");
-		const individual = document.getElementById("individualDiv");
-		firmName?.classList.remove("hidden");
-		firmName?.classList.add("flex");
-		individual?.classList.remove("flex");
-		individual?.classList.add("hidden");
-	};
-
-	const handleIndividual = () => {
-		const firmName = document.getElementById("firmNameDiv");
-		const individual = document.getElementById("individualDiv");
-		firmName?.classList.remove("flex");
-		firmName?.classList.add("hidden");
-		individual?.classList.remove("hidden");
-		individual?.classList.add("flex");
-	};
+	// State for form fields
+	const [userType, setUserType] = useState("volunteer"); // Default to 'volunteer'
+	const [legalRepType, setLegalRepType] = useState(""); // firm or individual
+	const [name, setName] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+	const [schoolName, setSchoolName] = useState("");
+	const [firmName, setFirmName] = useState("");
+	const [locationField, setLocationField] = useState("");
+	const [practiceArea, setPracticeArea] = useState("");
 
 	useEffect(() => {
 		if (location.state?.from === "partner") {
@@ -77,8 +54,46 @@ const Register = () => {
 		}
 	}, [location]);
 
+	const isLegalRep = userType === "legalRep";
+	const isFirmOrIndividualSelected =
+		legalRepType === "firm" || legalRepType === "individual";
+
+	// Validation logic
+	const requiredLegalRepFields = [
+		userType,
+		name,
+		email,
+		password,
+		confirmPassword,
+		legalRepType,
+		locationField,
+		practiceArea,
+	];
+	const requiredFirmFields = [firmName];
+	const isLegalRepFormValid =
+		isLegalRep &&
+		isFirmOrIndividualSelected &&
+		requiredLegalRepFields.every(Boolean) &&
+		(legalRepType === "firm" ? requiredFirmFields.every(Boolean) : true) &&
+		password === confirmPassword;
+
+	const requiredVolunteerFields = [
+		userType,
+		name,
+		email,
+		password,
+		confirmPassword,
+	];
+	const isVolunteerFormValid =
+		userType === "volunteer" &&
+		requiredVolunteerFields.every(Boolean) &&
+		password === confirmPassword;
+
+	const isFormValid = isLegalRepFormValid || isVolunteerFormValid;
+
 	const handleRegistration = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		// ...submit logic
 	};
 
 	return (
@@ -106,260 +121,290 @@ const Register = () => {
 							id="userType"
 							className="flex flex-col w-full text-[0.9rem] text-blue-950/95 font-semibold"
 						>
-							<p className="text-gray-900/80">I am registering as: </p>
+							<p className="text-gray-900/80">
+								I am registering as: <span className="text-red-500">*</span>
+							</p>
 							<div>
 								<label
-									htmlFor="volunteer"
-									className="flex gap-2 items-center hover:cursor-pointer"
+									htmlFor="volunteer-radio"
+									className="flex gap-2 items-center cursor-pointer"
 								>
 									<input
 										type="radio"
+										id="volunteer-radio"
 										name="userType"
 										value="volunteer"
-										id="volunteer"
-										defaultChecked={true}
-										onClick={handleVolunteerRadio}
-										className="mt-[0.1rem] hover:cursor-pointer accent-blue-900"
+										checked={userType === "volunteer"}
+										onChange={() => setUserType("volunteer")}
+										required
+										className="mt-[0.1rem] accent-blue-900 cursor-pointer"
 									/>
 									Law student / Account manager
 								</label>
 							</div>
 							<div>
 								<label
-									htmlFor="legalRep"
-									className="flex gap-2 items-center hover:cursor-pointer"
+									htmlFor="legalRep-radio"
+									className="flex gap-2 items-center cursor-pointer"
 								>
 									<input
 										type="radio"
+										id="legalRep-radio"
 										name="userType"
 										value="legalRep"
-										id="legalRep"
-										onClick={handleLegalRepRadio}
-										className="mt-[0.1rem] hover:cursor-pointer accent-blue-900"
+										checked={userType === "legalRep"}
+										onChange={() => setUserType("legalRep")}
+										required
+										className="mt-[0.1rem] accent-blue-900 cursor-pointer"
 									/>
 									Legal Representative
 								</label>
 							</div>
 						</div>
-						<div id="volunteerForm" className="flex flex-col gap-4 mt-3">
-							<label
-								htmlFor="name"
-								className="flex flex-col gap-2.5 text-gray-600 font-medium"
-							>
-								<span>
-									Full Name <span className="text-red-500">*</span>
-								</span>
-								<input
-									type="name"
-									name="name"
-									placeholder="John Doe"
-									className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10  px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
-								/>
-								<p className="text-[0.81rem] text-slate-500">
-									<span className="text-red-600">*</span> required field
-								</p>
-							</label>
-							<label
-								htmlFor="email"
-								className="flex flex-col gap-2 text-gray-600 font-medium"
-							>
-								<span>
-									Email <span className="text-red-500">*</span>
-								</span>
-								<input
-									type="email"
-									name="email"
-									placeholder="name@example.com"
-									className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10  px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
-								/>
-								<p className="text-[0.81rem] text-slate-500">
-									<span className="text-red-600">*</span> required field
-								</p>
-							</label>
-							<label
-								htmlFor="password"
-								className="flex flex-col gap-2 text-gray-600 font-medium"
-							>
-								<span>
-									Password <span className="text-red-500">*</span>
-								</span>
-								<input
-									type="password"
-									name="password"
-									placeholder="eg: **********"
-									className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
-								/>
-								<p className="text-[0.81rem] text-slate-500">
-									<span className="text-red-600">*</span> required field
-								</p>
-							</label>
-							<label
-								htmlFor="password"
-								className="flex flex-col gap-2 text-gray-600 font-medium"
-							>
-								<span>
-									Confirm Password <span className="text-red-500">*</span>
-								</span>
-								<input
-									type="password"
-									name="password"
-									placeholder="eg: **********"
-									className="border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800
-								"
-								/>
-								<p className="text-[0.81rem] text-slate-500">
-									<span className="text-red-600">*</span> required field
-								</p>
-							</label>
-							<label
-								htmlFor="schoolName"
-								className="flex flex-col gap-2 text-gray-600 font-medium"
-							>
-								School Name (optional)
-								<input
-									type="text"
-									name="schoolName"
-									id="schoolName"
-									placeholder="eg: UPSA Law School"
-									className="border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
-								/>
-							</label>
-						</div>
-						<div id="legalRepForm" className="hidden flex-col gap-4 mt-3">
-							<label
-								htmlFor="name"
-								className="flex flex-col gap-2 text-gray-600 font-medium"
-							>
-								<span>
-									Full Name <span className="text-red-500">*</span>
-								</span>
-								<input
-									required
-									type="name"
-									name="name"
-									placeholder="John Doe"
-									className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10  px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
-								/>
-								<p className="text-[0.81rem] text-slate-500">
-									<span className="text-red-600">*</span> required field
-								</p>
-							</label>
-							<label
-								htmlFor="email"
-								className="flex flex-col gap-2 text-gray-600 font-medium"
-							>
-								<span>
-									Email <span className="text-red-500">*</span>
-								</span>
-								<input
-									required
-									type="email"
-									name="email"
-									placeholder="name@example.com"
-									className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10  px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
-								/>
-								<p className="text-[0.81rem] text-slate-500">
-									<span className="text-red-600">*</span> required field
-								</p>
-							</label>
-							<label
-								htmlFor="password"
-								className="flex flex-col gap-2 text-gray-600 font-medium"
-							>
-								<span>
-									Password <span className="text-red-500">*</span>
-								</span>
-								<input
-									required
-									type="password"
-									name="password"
-									placeholder="eg: **********"
-									className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
-								/>
-								<p className="text-[0.81rem] text-slate-500">
-									<span className="text-red-600">*</span> required field
-								</p>
-							</label>
-							<label
-								htmlFor="password"
-								className="flex flex-col gap-2 text-gray-600 font-medium"
-							>
-								<span>
-									Confirm Password <span className="text-red-500">*</span>
-								</span>
-								<input
-									required
-									type="password"
-									name="password"
-									placeholder="eg: **********"
-									className="border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800
-								"
-								/>
-								<p className="text-[0.81rem] text-slate-500">
-									<span className="text-red-600">*</span> required field
-								</p>
-							</label>
-							<div id="firmOrIndividual" className="flex gap-2">
+						{userType === "volunteer" && (
+							<div id="volunteerForm" className="flex flex-col gap-4 mt-3">
 								<label
-									htmlFor="firm"
-									className="flex gap-1 text-gray-600 font-medium cursor-pointer"
+									htmlFor="name"
+									className="flex flex-col gap-2.5 text-gray-600 font-medium"
 								>
+									<span>
+										Full Name <span className="text-red-500">*</span>
+									</span>
 									<input
-										type="radio"
-										name="firmOrIndividual"
-										id="firm"
-										onClick={handleFirm}
-										className="mt-[0.1rem] hover:cursor-pointer accent-blue-900"
+										type="text"
+										name="name"
+										placeholder="John Doe"
+										value={name}
+										onChange={(e) => setName(e.target.value)}
+										className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10  px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
 									/>
-									Firm
+									<p className="text-[0.81rem] text-slate-500">
+										<span className="text-red-600">*</span> required field
+									</p>
 								</label>
 								<label
-									htmlFor="individual"
-									className="flex gap-1 text-gray-600 font-medium cursor-pointer"
+									htmlFor="email"
+									className="flex flex-col gap-2 text-gray-600 font-medium"
 								>
+									<span>
+										Email <span className="text-red-500">*</span>
+									</span>
 									<input
-										type="radio"
-										name="firmOrIndividual"
-										id="individual"
-										onClick={handleIndividual}
-										className="mt-[0.1rem] hover:cursor-pointer accent-blue-900"
+										type="email"
+										name="email"
+										placeholder="name@example.com"
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
+										className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10  px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
 									/>
-									Individual
+									<p className="text-[0.81rem] text-slate-500">
+										<span className="text-red-600">*</span> required field
+									</p>
+								</label>
+								<label
+									htmlFor="password"
+									className="flex flex-col gap-2 text-gray-600 font-medium"
+								>
+									<span>
+										Password <span className="text-red-500">*</span>
+									</span>
+									<input
+										type="password"
+										name="password"
+										placeholder="eg: **********"
+										value={password}
+										onChange={(e) => setPassword(e.target.value)}
+										className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
+									/>
+									<p className="text-[0.81rem] text-slate-500">
+										<span className="text-red-600">*</span> required field
+									</p>
+								</label>
+								<label
+									htmlFor="confirmPassword"
+									className="flex flex-col gap-2 text-gray-600 font-medium"
+								>
+									<span>
+										Confirm Password <span className="text-red-500">*</span>
+									</span>
+									<input
+										type="password"
+										name="confirmPassword"
+										placeholder="eg: **********"
+										value={confirmPassword}
+										onChange={(e) => setConfirmPassword(e.target.value)}
+										className="border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
+									/>
+									<p className="text-[0.81rem] text-slate-500">
+										<span className="text-red-600">*</span> required field
+									</p>
+								</label>
+								<label
+									htmlFor="schoolName"
+									className="flex flex-col gap-2 text-gray-600 font-medium"
+								>
+									School Name (optional)
+									<input
+										type="text"
+										name="schoolName"
+										id="schoolName"
+										placeholder="eg: UPSA Law School"
+										value={schoolName}
+										onChange={(e) => setSchoolName(e.target.value)}
+										className="border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
+									/>
 								</label>
 							</div>
-							<div id="firmNameDiv" className="w-full flex-col gap-5 hidden">
+						)}
+						{userType === "legalRep" && (
+							<div id="legalRepForm" className="flex flex-col gap-4 mt-3">
 								<label
-									htmlFor="firmName"
-									id="firmName"
-									className="flex flex-col gap-2.5 text-gray-600 font-medium w-full"
+									htmlFor="name"
+									className="flex flex-col gap-2 text-gray-600 font-medium"
 								>
 									<span>
-										Firm Name <span className="text-red-600">*</span>
+										Full Name <span className="text-red-500">*</span>
 									</span>
 									<input
 										type="text"
-										name="firmName"
-										id="firmName"
-										placeholder="eg: Pearson Hardmann"
-										className=" border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
+										name="name"
+										placeholder="John Doe"
+										value={name}
+										onChange={(e) => setName(e.target.value)}
+										className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10  px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
 									/>
 									<p className="text-[0.81rem] text-slate-500">
 										<span className="text-red-600">*</span> required field
 									</p>
 								</label>
 								<label
-									htmlFor="firmLocation"
-									id="firmLocation"
+									htmlFor="email"
+									className="flex flex-col gap-2 text-gray-600 font-medium"
+								>
+									<span>
+										Email <span className="text-red-500">*</span>
+									</span>
+									<input
+										type="email"
+										name="email"
+										placeholder="name@example.com"
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
+										className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10  px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
+									/>
+									<p className="text-[0.81rem] text-slate-500">
+										<span className="text-red-600">*</span> required field
+									</p>
+								</label>
+								<label
+									htmlFor="password"
+									className="flex flex-col gap-2 text-gray-600 font-medium"
+								>
+									<span>
+										Password <span className="text-red-500">*</span>
+									</span>
+									<input
+										type="password"
+										name="password"
+										placeholder="eg: **********"
+										value={password}
+										onChange={(e) => setPassword(e.target.value)}
+										className="border-[0.7px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
+									/>
+									<p className="text-[0.81rem] text-slate-500">
+										<span className="text-red-600">*</span> required field
+									</p>
+								</label>
+								<label
+									htmlFor="confirmPassword"
+									className="flex flex-col gap-2 text-gray-600 font-medium"
+								>
+									<span>
+										Confirm Password <span className="text-red-500">*</span>
+									</span>
+									<input
+										type="password"
+										name="confirmPassword"
+										placeholder="eg: **********"
+										value={confirmPassword}
+										onChange={(e) => setConfirmPassword(e.target.value)}
+										className="border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
+									/>
+									<p className="text-[0.81rem] text-slate-500">
+										<span className="text-red-600">*</span> required field
+									</p>
+								</label>
+								<span className="flex w-full gap-4 mt-5">
+									<label
+										htmlFor="firm-radio"
+										className="flex gap-2 text-gray-600 font-medium cursor-pointer"
+									>
+										<input
+											type="radio"
+											id="firm-radio"
+											name="firmOrIndividual"
+											value="firm"
+											checked={legalRepType === "firm"}
+											onChange={() => setLegalRepType("firm")}
+											required
+											className="mt-[0.1rem] accent-blue-900 cursor-pointer"
+										/>
+										Firm
+									</label>
+									<label
+										htmlFor="individual-radio"
+										className="flex gap-2 text-gray-600 font-medium cursor-pointer"
+									>
+										<input
+											type="radio"
+											id="individual-radio"
+											name="firmOrIndividual"
+											value="individual"
+											checked={legalRepType === "individual"}
+											onChange={() => setLegalRepType("individual")}
+											required
+											className="mt-[0.1rem] accent-blue-900 cursor-pointer"
+										/>
+										Individual
+									</label>
+								</span>
+								{legalRepType === "firm" && (
+									<label
+										htmlFor="firmName"
+										className="flex flex-col gap-2.5 text-gray-600 font-medium w-full"
+									>
+										<span>
+											Firm Name <span className="text-red-600">*</span>
+										</span>
+										<input
+											type="text"
+											name="firmName"
+											id="firmName"
+											placeholder="eg: Pearson Hardmann"
+											value={firmName}
+											onChange={(e) => setFirmName(e.target.value)}
+											className=" border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
+										/>
+										<p className="text-[0.81rem] text-slate-500">
+											<span className="text-red-600">*</span> required field
+										</p>
+									</label>
+								)}
+								{/* Area(s) of Practice and Location for both Firm and Individual */}
+								<label
+									htmlFor="locationField"
 									className="flex flex-col gap-2.5 text-gray-600 font-medium w-full"
 								>
 									<span>
-										Firm Region/Location <span className="text-red-600">*</span>
+										Region/Location <span className="text-red-600">*</span>
 									</span>
 									<input
 										type="text"
-										name="firmLocation"
-										id="firmLocation"
+										name="locationField"
+										id="locationField"
 										placeholder="eg: Accra"
+										value={locationField}
+										onChange={(e) => setLocationField(e.target.value)}
 										className=" border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
 									/>
 									<p className="text-[0.81rem] text-slate-500">
@@ -367,8 +412,7 @@ const Register = () => {
 									</p>
 								</label>
 								<label
-									htmlFor="firmPracticeLocation"
-									id="firmPracticeLocation"
+									htmlFor="practiceArea"
 									className="flex flex-col gap-2.5 text-gray-600 font-medium w-full"
 								>
 									<span>
@@ -376,9 +420,11 @@ const Register = () => {
 									</span>
 									<input
 										type="text"
-										name="firmPracticeLocation"
-										id="firmPracticeLocation"
-										placeholder="eg: Accra, Kumasi"
+										name="practiceArea"
+										id="practiceArea"
+										placeholder="eg: Family Law, Criminal Law"
+										value={practiceArea}
+										onChange={(e) => setPracticeArea(e.target.value)}
 										className=" border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
 									/>
 									<p className="text-[0.81rem] text-slate-500">
@@ -386,10 +432,15 @@ const Register = () => {
 									</p>
 								</label>
 							</div>
-						</div>
+						)}
 						<button
 							type="submit"
-							className="bg-blue-950 w-full h-10 text-white rounded-md mt-3 mb-1"
+							disabled={!isFormValid}
+							className={`w-full h-10 rounded-md mt-3 mb-1 ${
+								isFormValid
+									? "bg-blue-950 text-white"
+									: "bg-gray-200 text-gray-400 cursor-not-allowed"
+							}`}
 						>
 							Register
 						</button>
