@@ -327,7 +327,7 @@ const Register = () => {
 									Individual
 								</label>
 							</div>
-							<div id="firmNameDiv" className="w-full hidden">
+							<div id="firmNameDiv" className="w-full flex-col gap-5 hidden">
 								<label
 									htmlFor="firmName"
 									id="firmName"
@@ -343,6 +343,47 @@ const Register = () => {
 										placeholder="eg: Pearson Hardmann"
 										className=" border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
 									/>
+									<p className="text-[0.81rem] text-slate-500">
+										<span className="text-red-600">*</span> required field
+									</p>
+								</label>
+								<label
+									htmlFor="firmLocation"
+									id="firmLocation"
+									className="flex flex-col gap-2.5 text-gray-600 font-medium w-full"
+								>
+									<span>
+										Firm Region/Location <span className="text-red-600">*</span>
+									</span>
+									<input
+										type="text"
+										name="firmLocation"
+										id="firmLocation"
+										placeholder="eg: Accra"
+										className=" border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
+									/>
+									<p className="text-[0.81rem] text-slate-500">
+										<span className="text-red-600">*</span> required field
+									</p>
+								</label>
+								<label
+									htmlFor="firmPracticeLocation"
+									id="firmPracticeLocation"
+									className="flex flex-col gap-2.5 text-gray-600 font-medium w-full"
+								>
+									<span>
+										Area(s) of Practice <span className="text-red-600">*</span>
+									</span>
+									<input
+										type="text"
+										name="firmPracticeLocation"
+										id="firmPracticeLocation"
+										placeholder="eg: Accra, Kumasi"
+										className=" border-[0.3px] border-gray-300 rounded-md h-10 lg:h-10 px-3 font-normal text-black focus:outline focus:outline-1 focus:outline-blue-800"
+									/>
+									<p className="text-[0.81rem] text-slate-500">
+										<span className="text-red-600">*</span> required field
+									</p>
 								</label>
 							</div>
 						</div>
